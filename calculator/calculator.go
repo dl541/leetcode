@@ -1,20 +1,31 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"unicode"
 )
 
 func main() {
-	ans := calculate("3+5/(5-4)")
-	fmt.Println(ans)
+	fmt.Println("This is a simple calculator. Type exit to exit the program")
+	scanner := bufio.NewScanner(os.Stdin)
+	for {
+		fmt.Println("Enter expression: ")
+		scanner.Scan()
+		text := scanner.Text()
+		if strings.TrimSpace(text) == "exit" {
+			break
+		}
+		fmt.Printf("The answer is %v\n", calculate(text))
+	}
+	fmt.Println("Goodbye!")
 }
 
 func calculate(s string) int {
 	tokens := tokenize(&s)
-	fmt.Printf("%v\n", tokenize(&s))
 	return NewScanner(tokens).parseTerm()
 }
 
@@ -69,8 +80,6 @@ loop:
 }
 
 func (s *Scanner) parseItem() int {
-	fmt.Printf("%+v %v %v\n", s, s.ind, s.lookup())
-
 	if s.lookup() == "(" {
 		s.consume()
 		val := s.parseTerm()
