@@ -79,7 +79,7 @@ loop:
 	return val
 }
 
-func (s *Scanner) parseItem() int {
+func (s *Scanner) parseItem() (int, error) {
 	if s.lookup() == "(" {
 		s.consume()
 		val := s.parseTerm()
@@ -88,14 +88,14 @@ func (s *Scanner) parseItem() int {
 		} else {
 			panic(fmt.Sprintf("Expect ), but got %v in ind %v", s.lookup(), s.ind))
 		}
-		return val
+		return val, nil
 	} else {
 		val, err := strconv.Atoi(s.lookup())
 		if err != nil {
 			panic(fmt.Sprintf("Expect digits, but got %v in ind %v", s.lookup(), s.ind))
 		}
 		s.consume()
-		return val
+		return val, nil
 	}
 }
 
